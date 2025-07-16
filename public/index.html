@@ -1,0 +1,3210 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MONARCHY | Découvrez le Bénin - Guide Touristique Complet</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&family=Urbanist:wght@300;500;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+    <style>
+        :root {
+            --noir: #000000;
+            --blanc: #FFFFFF;
+            --gris: #2E2E2E;
+            --gris-clair: #3A3A3A;
+            --accent: #FFD700;
+            --accent-fonce: #E6C200;
+            --success: #4CAF50;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Urbanist', sans-serif;
+            background-color: var(--noir);
+            color: var(--blanc);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Logo MONARCHY */
+        .logo {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 900;
+            font-size: clamp(2.5rem, 8vw, 5rem);
+            text-transform: uppercase;
+            letter-spacing: -0.1rem;
+            background: linear-gradient(90deg, var(--blanc) 50%, transparent 50%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 2px 2px 0 rgba(255,255,255,0.1);
+            margin: 1rem 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            letter-spacing: 0.1rem;
+        }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 5%;
+            background-color: rgba(0,0,0,0.8);
+            position: fixed;
+            width: 100%;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+        
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1.1rem;
+            position: relative;
+            padding: 0.5rem 0;
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+        
+        /* Hamburger Menu */
+        .hamburger {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--blanc);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        /* Hero Section */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 5%;
+            background: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('https://images.unsplash.com/photo-1500382017468-9049fed747ef?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.8) 100%);
+        }
+        
+        .hero h2 {
+            font-size: clamp(1.5rem, 4vw, 3rem);
+            margin-bottom: 2rem;
+            font-weight: 300;
+            position: relative;
+            z-index: 2;
+            animation: fadeInDown 1s ease-out;
+        }
+        
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background-color: var(--accent);
+            color: var(--noir);
+            text-decoration: none;
+            font-weight: 700;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            border: 2px solid var(--accent);
+            position: relative;
+            z-index: 2;
+            overflow: hidden;
+        }
+        
+        .cta-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: -1;
+        }
+        
+        .cta-button:hover {
+            background-color: transparent;
+            color: var(--accent);
+        }
+        
+        .cta-button:hover::after {
+            transform: translateX(0);
+        }
+        
+        /* Sections communes */
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            position: relative;
+        }
+        
+        .section-title {
+            font-size: clamp(2rem, 5vw, 2.5rem);
+            color: var(--accent);
+            margin-bottom: 1rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 3px;
+            background-color: var(--accent);
+            border-radius: 2px;
+        }
+        
+        .section-subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+            color: rgba(255,255,255,0.7);
+            max-width: 700px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        /* Carte Interactive */
+        .map-section {
+            padding: 5rem 5%;
+            background-color: var(--gris);
+            position: relative;
+        }
+        
+        .map-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1519046904884-53103b34b206?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        #benin-map {
+            height: 70vh;
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+        }
+        
+        /* Galerie */
+        .gallery {
+            padding: 5rem 5%;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+        
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 8px;
+            height: 250px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.2);
+        }
+        
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        
+        .gallery-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            padding: 1.5rem 1rem;
+            color: white;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .gallery-item:hover .overlay {
+            transform: translateY(0);
+        }
+        
+        /* Section Hôtels */
+        .hotels-section {
+            padding: 5rem 5%;
+            background-color: var(--noir);
+            position: relative;
+        }
+        
+        .hotels-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+        }
+        
+        .hotel-filters {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .hotel-filter-btn {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--gris);
+            color: var(--blanc);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hotel-filter-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 215, 0, 0.1);
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.3s ease;
+            z-index: 0;
+        }
+        
+        .hotel-filter-btn:hover,
+        .hotel-filter-btn.active {
+            background-color: var(--accent);
+            color: var(--noir);
+        }
+        
+        .hotel-filter-btn:hover::after,
+        .hotel-filter-btn.active::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+        
+        .hotels-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .hotel-card {
+            background-color: var(--gris);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .hotel-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255,215,0,0.2);
+        }
+        
+        .hotel-image {
+            height: 200px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .hotel-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .hotel-card:hover .hotel-image img {
+            transform: scale(1.05);
+        }
+        
+        .hotel-rating {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.7);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            z-index: 2;
+        }
+        
+        .hotel-price {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            background-color: var(--accent);
+            color: var(--noir);
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            font-weight: 700;
+            z-index: 2;
+        }
+        
+        .hotel-content {
+            padding: 1.5rem;
+        }
+        
+        .hotel-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+        
+        .hotel-location {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+        
+        .hotel-amenities {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.7rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hotel-amenity {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.1);
+            padding: 0.3rem 0.6rem;
+            border-radius: 20px;
+        }
+        
+        .hotel-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .hotel-view-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: transparent;
+            color: var(--accent);
+            border: 1px solid var(--accent);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        .hotel-view-btn:hover {
+            background-color: var(--accent);
+            color: var(--noir);
+        }
+        
+        .hotel-book-btn {
+            padding: 0.6rem 1.2rem;
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hotel-book-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        
+        .hotel-book-btn:hover::after {
+            transform: translateX(0);
+        }
+        
+        /* Reviews Section */
+        .hotel-reviews {
+            background: var(--gris-clair);
+            padding: 1.5rem;
+            border-radius: 0 0 10px 10px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+        
+        .hotel-reviews.active {
+            max-height: 1000px;
+        }
+        
+        .reviews-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .reviews-title {
+            font-size: 1.3rem;
+            color: var(--accent);
+        }
+        
+        .add-review-btn {
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .add-review-btn:hover {
+            background-color: var(--accent-fonce);
+        }
+        
+        .reviews-list {
+            display: grid;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .review-item {
+            background: rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 3px solid var(--accent);
+        }
+        
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+        
+        .review-author {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .review-date {
+            font-size: 0.8rem;
+            color: rgba(255,255,255,0.6);
+        }
+        
+        .review-rating {
+            color: var(--accent);
+            margin-bottom: 0.8rem;
+            display: flex;
+            gap: 0.2rem;
+        }
+        
+        .review-content {
+            line-height: 1.6;
+            color: rgba(255,255,255,0.8);
+        }
+        
+        .review-form {
+            background: rgba(0,0,0,0.3);
+            padding: 1.5rem;
+            border-radius: 8px;
+        }
+        
+        .form-title {
+            font-size: 1.2rem;
+            margin-bottom: 1.2rem;
+            color: var(--accent);
+        }
+        
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            color: var(--blanc);
+            font-family: inherit;
+        }
+        
+        .form-group textarea {
+            min-height: 100px;
+        }
+        
+        .rating-stars {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .star {
+            color: rgba(255,255,255,0.3);
+            cursor: pointer;
+            font-size: 1.5rem;
+            transition: color 0.2s ease;
+        }
+        
+        .star.active {
+            color: var(--accent);
+        }
+        
+        .submit-review {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .submit-review:hover {
+            background-color: var(--accent-fonce);
+        }
+        
+        /* Blog Section */
+        .blog-section {
+            padding: 5rem 5%;
+            background-color: var(--gris);
+            position: relative;
+        }
+        
+        .blog-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+        }
+        
+        .blog-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        
+        .blog-card {
+            background-color: var(--gris-clair);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .blog-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+        }
+        
+        .blog-image {
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .blog-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .blog-card:hover .blog-image img {
+            transform: scale(1.05);
+        }
+        
+        .blog-content {
+            padding: 1.5rem;
+        }
+        
+        .blog-category {
+            display: inline-block;
+            background-color: var(--accent);
+            color: var(--noir);
+            padding: 0.3rem 0.8rem;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+        
+        .blog-title {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            color: var(--blanc);
+        }
+        
+        .blog-excerpt {
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 1.5rem;
+            line-height: 1.6;
+        }
+        
+        .blog-read-more {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .blog-read-more::after {
+            content: '→';
+            transition: transform 0.3s ease;
+        }
+        
+        .blog-read-more:hover {
+            color: var(--blanc);
+        }
+        
+        .blog-read-more:hover::after {
+            transform: translateX(5px);
+        }
+        
+        .blog-cta {
+            text-align: center;
+        }
+        
+        /* Modal de réservation */
+        .booking-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1003;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .booking-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .booking-content {
+            background-color: var(--gris-clair);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 600px;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+        
+        .booking-modal.active .booking-content {
+            transform: translateY(0);
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--blanc);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-modal:hover {
+            color: var(--accent);
+        }
+        
+        .booking-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .booking-image {
+            width: 150px;
+            height: 100px;
+            border-radius: 5px;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+        
+        .booking-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .booking-info h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        .booking-info p {
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+        }
+        
+        .booking-form .form-group {
+            margin-bottom: 1.2rem;
+        }
+        
+        .booking-form label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--blanc);
+        }
+        
+        .booking-form input,
+        .booking-form select,
+        .booking-form textarea {
+            width: 100%;
+            padding: 0.8rem;
+            background-color: rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            color: var(--blanc);
+            font-family: inherit;
+        }
+        
+        .booking-form input:focus,
+        .booking-form select:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .booking-dates {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .booking-guests {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+        
+        .booking-price {
+            background-color: rgba(255,215,0,0.1);
+            padding: 1rem;
+            border-radius: 5px;
+            margin: 1.5rem 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .booking-price p {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        
+        .booking-price .total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .booking-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+        }
+        
+        .booking-cancel {
+            padding: 0.8rem 1.5rem;
+            background-color: transparent;
+            color: var(--blanc);
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .booking-cancel:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+        
+        .booking-submit {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        
+        /* Modal de confirmation */
+        .confirmation-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1004;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+        
+        .confirmation-modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .confirmation-content {
+            background-color: var(--gris-clair);
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            position: relative;
+            transform: translateY(-20px);
+            transition: transform 0.3s ease;
+        }
+        
+        .confirmation-modal.active .confirmation-content {
+            transform: translateY(0);
+        }
+        
+        .confirmation-icon {
+            font-size: 3rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .confirmation-title {
+            font-size: 1.8rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+        }
+        
+        .confirmation-message {
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+        
+        .confirmation-close {
+            padding: 0.8rem 1.5rem;
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* Formulaire Inscription/Connexion */
+        .form-section {
+            padding: 5rem 5%;
+            background-color: var(--noir);
+            position: relative;
+        }
+        
+        .form-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+        }
+        
+        .form-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: var(--gris);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 1;
+        }
+        
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+        
+        .form-group input, 
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #444;
+            border-radius: 5px;
+            background-color: #333;
+            color: var(--blanc);
+            font-family: inherit;
+        }
+        
+        .social-login {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .social-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: #333;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .social-btn:hover {
+            background-color: var(--accent);
+            color: var(--noir);
+        }
+        
+        /* AI Assistant */
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background-color: var(--accent);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            z-index: 1001;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .ai-assistant:hover {
+            transform: scale(1.1);
+        }
+        
+        .ai-chatbox {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 350px;
+            max-height: 500px;
+            background-color: var(--gris);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 1001;
+            overflow: hidden;
+            border: 1px solid var(--accent);
+        }
+        
+        .ai-chatbox.active {
+            display: flex;
+        }
+        
+        .ai-header {
+            background-color: var(--accent);
+            color: var(--noir);
+            padding: 12px 15px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .ai-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            max-height: 400px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .ai-message {
+            max-width: 80%;
+            padding: 10px 15px;
+            border-radius: 18px;
+            line-height: 1.4;
+        }
+        
+        .ai-question {
+            align-self: flex-end;
+            background-color: var(--accent);
+            color: var(--noir);
+            border-bottom-right-radius: 5px;
+        }
+        
+        .ai-response {
+            align-self: flex-start;
+            background-color: var(--gris-clair);
+            color: var(--blanc);
+            border-bottom-left-radius: 5px;
+        }
+        
+        .ai-input {
+            display: flex;
+            padding: 10px;
+            background-color: var(--gris-clair);
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .ai-input input {
+            flex: 1;
+            padding: 10px 15px;
+            border-radius: 20px;
+            border: none;
+            background-color: rgba(0,0,0,0.3);
+            color: var(--blanc);
+            outline: none;
+        }
+        
+        .ai-input button {
+            background-color: var(--accent);
+            color: var(--noir);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-left: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .typing-indicator {
+            display: flex;
+            gap: 4px;
+            padding: 10px 15px;
+            background-color: var(--gris-clair);
+            color: var(--blanc);
+            border-radius: 18px;
+            align-self: flex-start;
+            max-width: 80%;
+        }
+        
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background-color: var(--blanc);
+            border-radius: 50%;
+            margin: 0 2px;
+            animation: typing 1s infinite ease-in-out;
+        }
+        
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        
+        @keyframes typing {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        
+        /* Language Switcher */
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1002;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .language-switcher button {
+            background-color: var(--gris);
+            color: var(--blanc);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .language-switcher button:hover,
+        .language-switcher button.active {
+            background-color: var(--accent);
+            color: var(--noir);
+        }
+        
+        /* Weather Widget */
+        .weather-widget {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            background: rgba(0,0,0,0.7);
+            padding: 10px 15px;
+            border-radius: 8px;
+            z-index: 999;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(5px);
+        }
+        
+        .weather-icon {
+            font-size: 1.2rem;
+            color: var(--accent);
+        }
+        
+        /* PWA Install Prompt */
+        #installContainer {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--accent);
+            color: var(--noir);
+            padding: 10px 20px;
+            border-radius: 50px;
+            z-index: 1005;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
+        
+        #installContainer.active {
+            display: flex;
+        }
+        
+        #installButton {
+            background: none;
+            border: none;
+            color: var(--noir);
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        
+        /* Footer */
+        footer {
+            padding: 3rem 5%;
+            background-color: var(--gris-clair);
+            text-align: center;
+            position: relative;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://images.unsplash.com/photo-1503917988258-f87a78e3c995?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80') no-repeat center center/cover;
+            opacity: 0.05;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .footer-links a {
+            color: var(--blanc);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+        
+        .footer-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 1px;
+            background-color: var(--accent);
+            transition: width 0.3s ease;
+        }
+        
+        .footer-links a:hover {
+            color: var(--accent);
+        }
+        
+        .footer-links a:hover::after {
+            width: 100%;
+        }
+        
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .social-icons a {
+            color: var(--blanc);
+            font-size: 1.5rem;
+            transition: color 0.3s ease;
+        }
+        
+        .social-icons a:hover {
+            color: var(--accent);
+        }
+        
+        footer p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Animations */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+        
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: block;
+            }
+            
+            .nav-links {
+                display: none;
+                flex-direction: column;
+                position: absolute;
+                top: 80px;
+                left: 0;
+                width: 100%;
+                background: rgba(0,0,0,0.9);
+                padding: 1rem 0;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .gallery {
+                grid-template-columns: 1fr;
+            }
+            
+            .hotels-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-dates,
+            .booking-guests {
+                grid-template-columns: 1fr;
+            }
+            
+            .booking-header {
+                flex-direction: column;
+            }
+            
+            .booking-image {
+                width: 100%;
+                height: 150px;
+            }
+            
+            .booking-actions {
+                flex-direction: column;
+            }
+            
+            .ai-chatbox {
+                width: 90%;
+                right: 5%;
+            }
+            
+            .language-switcher {
+                top: 80px;
+                right: 10px;
+            }
+            
+            .weather-widget {
+                top: 130px;
+                right: 10px;
+            }
+            
+            .blog-container {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="app"></div>
+    
+    <!-- Scripts -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // Complete translation dictionary
+        const translations = {
+            // Navigation
+            "nav-home": {
+                "fr": "Accueil",
+                "en": "Home"
+            },
+            "nav-map": {
+                "fr": "Carte",
+                "en": "Map"
+            },
+            "nav-gallery": {
+                "fr": "Galerie",
+                "en": "Gallery"
+            },
+            "nav-hotels": {
+                "fr": "Hôtels",
+                "en": "Hotels"
+            },
+            "nav-blog": {
+                "fr": "Blog",
+                "en": "Blog"
+            },
+            "nav-contact": {
+                "fr": "Contact",
+                "en": "Contact"
+            },
+            
+            // Hero Section
+            "welcome-heading": {
+                "fr": "Découvrez les trésors cachés du Bénin",
+                "en": "Discover Benin's hidden treasures"
+            },
+            "explore-button": {
+                "fr": "Explorer maintenant",
+                "en": "Explore now"
+            },
+            
+            // Map Section
+            "map-title": {
+                "fr": "Carte Interactive",
+                "en": "Interactive Map"
+            },
+            "map-subtitle": {
+                "fr": "Explorez les sites touristiques du Bénin",
+                "en": "Explore Benin's tourist sites"
+            },
+            
+            // Gallery Section
+            "gallery-title": {
+                "fr": "Galerie",
+                "en": "Gallery"
+            },
+            "gallery-subtitle": {
+                "fr": "Découvrez la beauté du Bénin en images",
+                "en": "Discover Benin's beauty through images"
+            },
+            "porto-novo-desc": {
+                "fr": "La capitale culturelle",
+                "en": "The cultural capital"
+            },
+            "ouidah-desc": {
+                "fr": "Route des esclaves",
+                "en": "Slave route"
+            },
+            "ganvie-desc": {
+                "fr": "La Venise de l'Afrique",
+                "en": "The Venice of Africa"
+            },
+            "pendjari-desc": {
+                "fr": "Réserve naturelle",
+                "en": "Nature reserve"
+            },
+            "abomey-desc": {
+                "fr": "Palais royaux",
+                "en": "Royal palaces"
+            },
+            "grandpopo-desc": {
+                "fr": "Plages paradisiaques",
+                "en": "Paradise beaches"
+            },
+            
+            // Hotels Section
+            "hotels-title": {
+                "fr": "Hébergements",
+                "en": "Accommodations"
+            },
+            "hotels-subtitle": {
+                "fr": "Trouvez l'hôtel parfait pour votre séjour au Bénin",
+                "en": "Find the perfect hotel for your stay in Benin"
+            },
+            "filter-all": {
+                "fr": "Tous",
+                "en": "All"
+            },
+            "filter-luxury": {
+                "fr": "Luxe",
+                "en": "Luxury"
+            },
+            "filter-comfort": {
+                "fr": "Confort",
+                "en": "Comfort"
+            },
+            "filter-budget": {
+                "fr": "Économique",
+                "en": "Budget"
+            },
+            "filter-eco": {
+                "fr": "Écolodge",
+                "en": "Ecolodge"
+            },
+            "view-more": {
+                "fr": "Voir plus",
+                "en": "View more"
+            },
+            "book-now": {
+                "fr": "Réserver",
+                "en": "Book now"
+            },
+            "hotel-location-cotonou": {
+                "fr": "Cotonou, Bénin",
+                "en": "Cotonou, Benin"
+            },
+            "hotel-location-portonovo": {
+                "fr": "Porto-Novo, Bénin",
+                "en": "Porto-Novo, Benin"
+            },
+            "hotel-location-pendjari": {
+                "fr": "Parc Pendjari, Bénin",
+                "en": "Pendjari Park, Benin"
+            },
+            "hotel-location-grandpopo": {
+                "fr": "Grand-Popo, Bénin",
+                "en": "Grand-Popo, Benin"
+            },
+            "hotel-location-ouidah": {
+                "fr": "Ouidah, Bénin",
+                "en": "Ouidah, Benin"
+            },
+            "hotel-location-ganvie": {
+                "fr": "Ganvié, Bénin",
+                "en": "Ganvié, Benin"
+            },
+            "amenity-wifi": {
+                "fr": "WiFi",
+                "en": "WiFi"
+            },
+            "amenity-pool": {
+                "fr": "Piscine",
+                "en": "Pool"
+            },
+            "amenity-restaurant": {
+                "fr": "Restaurant",
+                "en": "Restaurant"
+            },
+            "amenity-spa": {
+                "fr": "Spa",
+                "en": "Spa"
+            },
+            "amenity-parking": {
+                "fr": "Parking",
+                "en": "Parking"
+            },
+            "amenity-service": {
+                "fr": "Service",
+                "en": "Service"
+            },
+            "amenity-eco": {
+                "fr": "Écologique",
+                "en": "Eco-friendly"
+            },
+            "amenity-view": {
+                "fr": "Vue",
+                "en": "View"
+            },
+            "amenity-hiking": {
+                "fr": "Randonnée",
+                "en": "Hiking"
+            },
+            "amenity-beach": {
+                "fr": "Plage",
+                "en": "Beach"
+            },
+            "amenity-bike": {
+                "fr": "Location",
+                "en": "Rental"
+            },
+            "amenity-breakfast": {
+                "fr": "Petit-déj",
+                "en": "Breakfast"
+            },
+            "amenity-gym": {
+                "fr": "Gym",
+                "en": "Gym"
+            },
+            "amenity-restaurants": {
+                "fr": "2 Restaurants",
+                "en": "2 Restaurants"
+            },
+            "amenity-lake": {
+                "fr": "Vue lac",
+                "en": "Lake view"
+            },
+            "amenity-tours": {
+                "fr": "Excursions",
+                "en": "Tours"
+            },
+            
+            // Reviews Section
+            "reviews-title": {
+                "fr": "Avis des clients",
+                "en": "Customer Reviews"
+            },
+            "add-review": {
+                "fr": "Ajouter un avis",
+                "en": "Add a review"
+            },
+            "review-placeholder": {
+                "fr": "Partagez votre expérience...",
+                "en": "Share your experience..."
+            },
+            "submit-review": {
+                "fr": "Soumettre",
+                "en": "Submit"
+            },
+            "your-name": {
+                "fr": "Votre nom",
+                "en": "Your name"
+            },
+            "your-rating": {
+                "fr": "Votre note",
+                "en": "Your rating"
+            },
+            "your-review": {
+                "fr": "Votre avis",
+                "en": "Your review"
+            }
+        };
+
+        // Hotel data with reviews
+        const hotelsData = [
+            {
+                id: 1,
+                name: "Hôtel du Lac",
+                location: "Cotonou, Bénin",
+                price: 50000,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.8,
+                category: "luxe",
+                amenities: ["wifi", "pool", "restaurant", "spa"],
+                roomTypes: [
+                    { type: "standard", price: 50000 },
+                    { type: "deluxe", price: 75000 },
+                    { type: "suite", price: 120000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Marie Dubois",
+                        date: "2023-10-15",
+                        rating: 5,
+                        comment: "Séjour exceptionnel ! Le service était impeccable et la vue sur le lac magnifique. Je recommande vivement."
+                    },
+                    {
+                        id: 2,
+                        author: "Jean Martin",
+                        date: "2023-09-22",
+                        rating: 4,
+                        comment: "Très bel hôtel avec des équipements modernes. Le petit déjeuner était délicieux. La piscine pourrait être mieux entretenue."
+                    }
+                ]
+            },
+            {
+                id: 2,
+                name: "La Maison Rouge",
+                location: "Porto-Novo, Bénin",
+                price: 35000,
+                image: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.5,
+                category: "midrange",
+                amenities: ["wifi", "restaurant", "parking", "service"],
+                roomTypes: [
+                    { type: "standard", price: 35000 },
+                    { type: "deluxe", price: 50000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Sophie Lambert",
+                        date: "2023-11-03",
+                        rating: 5,
+                        comment: "Charmant hôtel avec un personnel très attentionné. La décoration est magnifique et la cuisine locale excellente."
+                    }
+                ]
+            },
+            {
+                id: 3,
+                name: "Écolodge Pendjari",
+                location: "Parc Pendjari, Bénin",
+                price: 28000,
+                image: "https://images.unsplash.com/photo-1561501900-3701fa6a0864?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.7,
+                category: "eco",
+                amenities: ["eco", "view", "hiking", "restaurant"],
+                roomTypes: [
+                    { type: "standard", price: 28000 },
+                    { type: "deluxe", price: 40000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Thomas Leroy",
+                        date: "2023-10-28",
+                        rating: 5,
+                        comment: "Expérience unique au cœur de la nature. Les safaris organisés par l'hôtel sont exceptionnels. À refaire !"
+                    },
+                    {
+                        id: 2,
+                        author: "Camille Bernard",
+                        date: "2023-09-15",
+                        rating: 4,
+                        comment: "Cadre idyllique et personnel très compétent. Les chambres sont confortables mais un peu rudimentaires."
+                    }
+                ]
+            },
+            {
+                id: 4,
+                name: "Auberge de Grand-Popo",
+                location: "Grand-Popo, Bénin",
+                price: 15000,
+                image: "https://images.unsplash.com/photo-1596178065887-1198b6148b2b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.2,
+                category: "budget",
+                amenities: ["beach", "bike", "breakfast"],
+                roomTypes: [
+                    { type: "standard", price: 15000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Luc Petit",
+                        date: "2023-11-10",
+                        rating: 4,
+                        comment: "Excellent rapport qualité-prix. La plage est à deux pas et le personnel très sympathique."
+                    }
+                ]
+            },
+            {
+                id: 5,
+                name: "Royal Benin",
+                location: "Ouidah, Bénin",
+                price: 65000,
+                image: "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.9,
+                category: "luxe",
+                amenities: ["wifi", "pool", "spa", "gym", "restaurant"],
+                roomTypes: [
+                    { type: "standard", price: 65000 },
+                    { type: "deluxe", price: 90000 },
+                    { type: "suite", price: 150000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Émilie Rousseau",
+                        date: "2023-10-05",
+                        rating: 5,
+                        comment: "Luxe et élégance à l'état pur. Le spa est divin et les chambres spacieuses. Un vrai paradis !"
+                    }
+                ]
+            },
+            {
+                id: 6,
+                name: "Résidence Ganvié",
+                location: "Ganvié, Bénin",
+                price: 25000,
+                image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                rating: 4.3,
+                category: "midrange",
+                amenities: ["lake", "restaurant", "tours"],
+                roomTypes: [
+                    { type: "standard", price: 25000 },
+                    { type: "deluxe", price: 35000 }
+                ],
+                reviews: [
+                    {
+                        id: 1,
+                        author: "Paul Moreau",
+                        date: "2023-11-12",
+                        rating: 4,
+                        comment: "Expérience authentique sur l'eau. Les excursions en pirogue sont inoubliables. Chambres propres et confortables."
+                    }
+                ]
+            }
+        ];
+
+        // Gallery data
+        const galleryItems = [
+            {
+                image: "https://images.unsplash.com/photo-1545566235-3514d7a81c0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Porto-Novo",
+                description: "La capitale culturelle"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Ouidah",
+                description: "Route des esclaves"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Ganvié",
+                description: "La Venise de l'Afrique"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Parc Pendjari",
+                description: "Réserve naturelle"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1503917988258-f87a78e3c995?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Abomey",
+                description: "Palais royaux"
+            },
+            {
+                image: "https://images.unsplash.com/photo-1470115636492-6d2b56f9146d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80",
+                title: "Grand-Popo",
+                description: "Plages paradisiaques"
+            }
+        ];
+
+        // Blog data
+        const blogPosts = [
+            {
+                image: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                category: "Culture",
+                title: "Ganvié: La Venise Africaine",
+                excerpt: "Découvrez la vie fascinante dans ce village lacustre classé au patrimoine mondial de l'UNESCO..."
+            },
+            {
+                image: "https://images.unsplash.com/photo-1503220317375-aaad61436b1b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                category: "Nature",
+                title: "Safari au Parc Pendjari",
+                excerpt: "Guide complet pour un safari inoubliable dans la plus grande réserve animalière d'Afrique de l'Ouest..."
+            },
+            {
+                image: "https://images.unsplash.com/photo-1527631746610-bca00a040d60?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+                category: "Patrimoine",
+                title: "Le Festival du Vodoun à Ouidah",
+                excerpt: "Immersion dans la célébration annuelle la plus importante de la culture vaudou au Bénin..."
+            }
+        ];
+
+        // Main application class
+        class MonarchyApp {
+            constructor() {
+                this.currentLang = 'fr';
+                this.currentHotel = null;
+                this.bookingModal = null;
+                this.confirmationModal = null;
+                this.aiChatbox = null;
+                this.map = null;
+                this.selectedRating = 0;
+                this.aiMessages = [];
+                this.typingIndicator = false;
+                this.weatherData = null;
+                
+                this.init();
+            }
+            
+            init() {
+                this.createStructure();
+                this.setupEventListeners();
+                this.setupMap();
+                this.updateTranslations();
+                this.fetchWeather();
+                this.setupPWA();
+            }
+            
+            createStructure() {
+                const app = document.getElementById('app');
+                
+                // Create PWA prompt
+                const installContainer = document.createElement('div');
+                installContainer.id = 'installContainer';
+                const installText = document.createElement('span');
+                installText.textContent = 'Installer l\'application MONARCHY';
+                const installButton = document.createElement('button');
+                installButton.id = 'installButton';
+                installButton.textContent = 'Installer';
+                installContainer.appendChild(installText);
+                installContainer.appendChild(installButton);
+                app.appendChild(installContainer);
+                
+                // Create weather widget
+                const weatherWidget = document.createElement('div');
+                weatherWidget.className = 'weather-widget';
+                weatherWidget.id = 'weatherWidget';
+                const weatherIcon = document.createElement('i');
+                weatherIcon.className = 'weather-icon fas fa-sun';
+                const weatherContent = document.createElement('div');
+                weatherContent.id = 'weatherContent';
+                weatherContent.textContent = 'Chargement...';
+                weatherWidget.appendChild(weatherIcon);
+                weatherWidget.appendChild(weatherContent);
+                app.appendChild(weatherWidget);
+                
+                // Create language switcher
+                const languageSwitcher = document.createElement('div');
+                languageSwitcher.className = 'language-switcher';
+                const frButton = document.createElement('button');
+                frButton.dataset.lang = 'fr';
+                frButton.className = 'active';
+                frButton.textContent = 'FR';
+                const enButton = document.createElement('button');
+                enButton.dataset.lang = 'en';
+                enButton.textContent = 'EN';
+                languageSwitcher.appendChild(frButton);
+                languageSwitcher.appendChild(enButton);
+                app.appendChild(languageSwitcher);
+                
+                // Create navigation
+                const nav = document.createElement('nav');
+                const logoDiv = document.createElement('div');
+                logoDiv.className = 'logo';
+                logoDiv.textContent = 'MONARCHY';
+                const hamburger = document.createElement('button');
+                hamburger.className = 'hamburger';
+                hamburger.id = 'hamburger';
+                hamburger.innerHTML = '<i class="fas fa-bars"></i>';
+                const navLinks = document.createElement('div');
+                navLinks.className = 'nav-links';
+                ['home', 'map', 'gallery', 'hotels', 'blog', 'contact'].forEach(id => {
+                    const link = document.createElement('a');
+                    link.href = `#${id}`;
+                    link.dataset.i18n = `nav-${id}`;
+                    link.textContent = id.charAt(0).toUpperCase() + id.slice(1);
+                    navLinks.appendChild(link);
+                });
+                nav.appendChild(logoDiv);
+                nav.appendChild(hamburger);
+                nav.appendChild(navLinks);
+                app.appendChild(nav);
+                
+                // Create hero section
+                const hero = document.createElement('section');
+                hero.className = 'hero';
+                hero.id = 'home';
+                const heroLogo = document.createElement('h1');
+                heroLogo.className = 'logo pulse';
+                heroLogo.textContent = 'MONARCHY';
+                const heroHeading = document.createElement('h2');
+                heroHeading.dataset.i18n = 'welcome-heading';
+                heroHeading.textContent = 'Découvrez les trésors cachés du Bénin';
+                const heroButton = document.createElement('a');
+                heroButton.href = '#map';
+                heroButton.className = 'cta-button';
+                heroButton.dataset.i18n = 'explore-button';
+                heroButton.textContent = 'Explorer maintenant';
+                hero.appendChild(heroLogo);
+                hero.appendChild(heroHeading);
+                hero.appendChild(heroButton);
+                app.appendChild(hero);
+                
+                // Create map section
+                const mapSection = document.createElement('section');
+                mapSection.className = 'map-section';
+                mapSection.id = 'map';
+                const mapHeader = this.createSectionHeader('map-title', 'map-subtitle');
+                const mapDiv = document.createElement('div');
+                mapDiv.id = 'benin-map';
+                mapSection.appendChild(mapHeader);
+                mapSection.appendChild(mapDiv);
+                app.appendChild(mapSection);
+                
+                // Create gallery section
+                const gallerySection = document.createElement('section');
+                gallerySection.className = 'gallery';
+                gallerySection.id = 'gallery';
+                const galleryHeader = this.createSectionHeader('gallery-title', 'gallery-subtitle');
+                gallerySection.appendChild(galleryHeader);
+                galleryItems.forEach(item => {
+                    const galleryItem = document.createElement('div');
+                    galleryItem.className = 'gallery-item';
+                    const img = document.createElement('img');
+                    img.src = item.image;
+                    img.alt = item.title;
+                    img.loading = 'lazy';
+                    const overlay = document.createElement('div');
+                    overlay.className = 'overlay';
+                    const title = document.createElement('h3');
+                    title.textContent = item.title;
+                    const desc = document.createElement('p');
+                    desc.textContent = item.description;
+                    overlay.appendChild(title);
+                    overlay.appendChild(desc);
+                    galleryItem.appendChild(img);
+                    galleryItem.appendChild(overlay);
+                    gallerySection.appendChild(galleryItem);
+                });
+                app.appendChild(gallerySection);
+                
+                // Create hotels section
+                const hotelsSection = document.createElement('section');
+                hotelsSection.className = 'hotels-section';
+                hotelsSection.id = 'hotels';
+                const hotelsHeader = this.createSectionHeader('hotels-title', 'hotels-subtitle');
+                hotelsSection.appendChild(hotelsHeader);
+                
+                // Hotel filters
+                const hotelFilters = document.createElement('div');
+                hotelFilters.className = 'hotel-filters';
+                const filterOptions = [
+                    { id: 'all', text: 'filter-all' },
+                    { id: 'luxe', text: 'filter-luxury' },
+                    { id: 'midrange', text: 'filter-comfort' },
+                    { id: 'budget', text: 'filter-budget' },
+                    { id: 'eco', text: 'filter-eco' }
+                ];
+                
+                filterOptions.forEach(filter => {
+                    const button = document.createElement('button');
+                    button.className = `hotel-filter-btn ${filter.id === 'all' ? 'active' : ''}`;
+                    button.dataset.hotelFilter = filter.id;
+                    button.dataset.i18n = filter.text;
+                    button.textContent = filter.id === 'all' ? 'Tous' : filter.id;
+                    hotelFilters.appendChild(button);
+                });
+                
+                hotelsSection.appendChild(hotelFilters);
+                
+                // Hotels container
+                const hotelsContainer = document.createElement('div');
+                hotelsContainer.className = 'hotels-container';
+                hotelsContainer.id = 'hotelsContainer';
+                hotelsSection.appendChild(hotelsContainer);
+                app.appendChild(hotelsSection);
+                
+                // Create blog section
+                const blogSection = document.createElement('section');
+                blogSection.className = 'blog-section';
+                blogSection.id = 'blog';
+                const blogHeader = this.createSectionHeader('blog-title', 'blog-subtitle');
+                blogSection.appendChild(blogHeader);
+                
+                // Blog container
+                const blogContainer = document.createElement('div');
+                blogContainer.className = 'blog-container';
+                blogPosts.forEach(post => {
+                    const blogCard = document.createElement('div');
+                    blogCard.className = 'blog-card';
+                    const blogImage = document.createElement('div');
+                    blogImage.className = 'blog-image';
+                    const img = document.createElement('img');
+                    img.src = post.image;
+                    img.alt = post.title;
+                    img.loading = 'lazy';
+                    blogImage.appendChild(img);
+                    const blogContent = document.createElement('div');
+                    blogContent.className = 'blog-content';
+                    const category = document.createElement('span');
+                    category.className = 'blog-category';
+                    category.textContent = post.category;
+                    const title = document.createElement('h3');
+                    title.className = 'blog-title';
+                    title.textContent = post.title;
+                    const excerpt = document.createElement('p');
+                    excerpt.className = 'blog-excerpt';
+                    excerpt.textContent = post.excerpt;
+                    const readMore = document.createElement('a');
+                    readMore.href = '#';
+                    readMore.className = 'blog-read-more';
+                    readMore.dataset.i18n = 'blog-read-more';
+                    readMore.textContent = 'Lire la suite';
+                    blogContent.appendChild(category);
+                    blogContent.appendChild(title);
+                    blogContent.appendChild(excerpt);
+                    blogContent.appendChild(readMore);
+                    blogCard.appendChild(blogImage);
+                    blogCard.appendChild(blogContent);
+                    blogContainer.appendChild(blogCard);
+                });
+                blogSection.appendChild(blogContainer);
+                
+                // Blog CTA
+                const blogCta = document.createElement('div');
+                blogCta.className = 'blog-cta';
+                const blogCtaButton = document.createElement('a');
+                blogCtaButton.href = '#';
+                blogCtaButton.className = 'cta-button';
+                blogCtaButton.dataset.i18n = 'blog-view-all';
+                blogCtaButton.textContent = 'Voir tous les articles';
+                blogCta.appendChild(blogCtaButton);
+                blogSection.appendChild(blogCta);
+                app.appendChild(blogSection);
+                
+                // Create booking modal
+                const bookingModal = document.createElement('div');
+                bookingModal.className = 'booking-modal';
+                bookingModal.id = 'booking-modal';
+                const bookingContent = document.createElement('div');
+                bookingContent.className = 'booking-content';
+                const closeModal = document.createElement('button');
+                closeModal.className = 'close-modal';
+                closeModal.innerHTML = '<i class="fas fa-times"></i>';
+                const bookingHeader = document.createElement('div');
+                bookingHeader.className = 'booking-header';
+                const bookingImage = document.createElement('div');
+                bookingImage.className = 'booking-image';
+                const hotelImg = document.createElement('img');
+                hotelImg.id = 'booking-hotel-image';
+                hotelImg.alt = '';
+                bookingImage.appendChild(hotelImg);
+                const bookingInfo = document.createElement('div');
+                bookingInfo.className = 'booking-info';
+                const hotelName = document.createElement('h3');
+                hotelName.id = 'booking-hotel-name';
+                hotelName.textContent = 'Nom de l\'hôtel';
+                const hotelLocation = document.createElement('p');
+                hotelLocation.id = 'booking-hotel-location';
+                hotelLocation.innerHTML = '<i class="fas fa-map-marker-alt"></i> Localisation';
+                const hotelPrice = document.createElement('p');
+                hotelPrice.id = 'booking-hotel-price';
+                hotelPrice.textContent = 'Prix: 0 FCFA/nuit';
+                bookingInfo.appendChild(hotelName);
+                bookingInfo.appendChild(hotelLocation);
+                bookingInfo.appendChild(hotelPrice);
+                bookingHeader.appendChild(bookingImage);
+                bookingHeader.appendChild(bookingInfo);
+                
+                // Booking form
+                const bookingForm = document.createElement('form');
+                bookingForm.className = 'booking-form';
+                bookingForm.id = 'booking-form';
+                
+                // Dates
+                const bookingDates = document.createElement('div');
+                bookingDates.className = 'booking-dates';
+                const checkInGroup = this.createFormGroup('arrival-date', 'date', 'check-in', true);
+                const checkOutGroup = this.createFormGroup('departure-date', 'date', 'check-out', true);
+                bookingDates.appendChild(checkInGroup);
+                bookingDates.appendChild(checkOutGroup);
+                
+                // Guests
+                const bookingGuests = document.createElement('div');
+                bookingGuests.className = 'booking-guests';
+                const adultsGroup = this.createFormGroup('adults', 'select', 'adults', true, [
+                    { value: '1', text: '1' },
+                    { value: '2', text: '2', selected: true },
+                    { value: '3', text: '3' },
+                    { value: '4', text: '4' }
+                ]);
+                const childrenGroup = this.createFormGroup('children', 'select', 'children', false, [
+                    { value: '0', text: '0', selected: true },
+                    { value: '1', text: '1' },
+                    { value: '2', text: '2' },
+                    { value: '3', text: '3' }
+                ]);
+                bookingGuests.appendChild(adultsGroup);
+                bookingGuests.appendChild(childrenGroup);
+                
+                // Room type
+                const roomTypeGroup = this.createFormGroup('room-type', 'select', 'room-type', true, [
+                    { value: 'standard', text: 'Chambre Standard' },
+                    { value: 'deluxe', text: 'Chambre Deluxe' },
+                    { value: 'suite', text: 'Suite' }
+                ]);
+                
+                // Special requests
+                const requestsGroup = this.createFormGroup('special-requests', 'textarea', 'special-requests', false);
+                
+                // Price
+                const bookingPrice = document.createElement('div');
+                bookingPrice.className = 'booking-price';
+                const totalLabel = document.createElement('p');
+                totalLabel.dataset.i18n = 'estimated-total';
+                totalLabel.textContent = 'Total estimé:';
+                const totalPrice = document.createElement('p');
+                totalPrice.className = 'total';
+                totalPrice.id = 'booking-total-price';
+                totalPrice.textContent = '0 FCFA';
+                bookingPrice.appendChild(totalLabel);
+                bookingPrice.appendChild(totalPrice);
+                
+                // Actions
+                const bookingActions = document.createElement('div');
+                bookingActions.className = 'booking-actions';
+                const cancelButton = document.createElement('button');
+                cancelButton.type = 'button';
+                cancelButton.className = 'booking-cancel';
+                cancelButton.dataset.i18n = 'cancel';
+                cancelButton.textContent = 'Annuler';
+                const submitButton = document.createElement('button');
+                submitButton.type = 'submit';
+                submitButton.className = 'booking-submit';
+                submitButton.dataset.i18n = 'confirm-booking';
+                submitButton.textContent = 'Confirmer la réservation';
+                bookingActions.appendChild(cancelButton);
+                bookingActions.appendChild(submitButton);
+                
+                bookingForm.appendChild(bookingDates);
+                bookingForm.appendChild(bookingGuests);
+                bookingForm.appendChild(roomTypeGroup);
+                bookingForm.appendChild(requestsGroup);
+                bookingForm.appendChild(bookingPrice);
+                bookingForm.appendChild(bookingActions);
+                
+                bookingContent.appendChild(closeModal);
+                bookingContent.appendChild(bookingHeader);
+                bookingContent.appendChild(bookingForm);
+                bookingModal.appendChild(bookingContent);
+                app.appendChild(bookingModal);
+                
+                // Create confirmation modal
+                const confirmationModal = document.createElement('div');
+                confirmationModal.className = 'confirmation-modal';
+                confirmationModal.id = 'confirmation-modal';
+                const confirmationContent = document.createElement('div');
+                confirmationContent.className = 'confirmation-content';
+                const confirmationIcon = document.createElement('div');
+                confirmationIcon.className = 'confirmation-icon';
+                confirmationIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
+                const confirmationTitle = document.createElement('h3');
+                confirmationTitle.className = 'confirmation-title';
+                confirmationTitle.id = 'confirmation-title';
+                confirmationTitle.textContent = 'Réservation confirmée';
+                const confirmationMessage = document.createElement('p');
+                confirmationMessage.className = 'confirmation-message';
+                confirmationMessage.id = 'confirmation-message';
+                const confirmationClose = document.createElement('button');
+                confirmationClose.className = 'confirmation-close';
+                confirmationClose.dataset.i18n = 'close';
+                confirmationClose.textContent = 'Fermer';
+                confirmationContent.appendChild(confirmationIcon);
+                confirmationContent.appendChild(confirmationTitle);
+                confirmationContent.appendChild(confirmationMessage);
+                confirmationContent.appendChild(confirmationClose);
+                confirmationModal.appendChild(confirmationContent);
+                app.appendChild(confirmationModal);
+                
+                // Create AI assistant
+                const aiButton = document.createElement('div');
+                aiButton.className = 'ai-assistant';
+                aiButton.id = 'ai-button';
+                aiButton.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2a2 2 0 0 0-2 2c0 1.02-.1 2.51-.26 4.04-.21 1.99-.53 4.98-1.39 6.96A2 2 0 0 0 8 16c0 .98.46 1.71 1.09 2.31.63.6 1.52 1.05 2.91 1.69 1.39-.64 2.28-1.09 2.91-1.69.63-.6 1.09-1.33 1.09-2.31a2 2 0 0 0-2.35-1.96c-.86-1.98-1.18-4.97-1.39-6.96C14.1 6.51 14 5.02 14 4a2 2 0 0 0-2-2z"></path>
+                        <path d="M10 22c1.49 0 2.89-.23 4-.65"></path>
+                    </svg>
+                `;
+                
+                const aiChatbox = document.createElement('div');
+                aiChatbox.className = 'ai-chatbox';
+                aiChatbox.id = 'ai-chatbox';
+                const aiHeader = document.createElement('div');
+                aiHeader.className = 'ai-header';
+                aiHeader.innerHTML = '<i class="fas fa-robot"></i> <span data-i18n="ai-title">Assistant Touristique</span>';
+                const aiMessages = document.createElement('div');
+                aiMessages.className = 'ai-messages';
+                aiMessages.id = 'ai-messages';
+                const aiWelcome = document.createElement('div');
+                aiWelcome.className = 'ai-message ai-response';
+                aiWelcome.dataset.i18n = 'ai-welcome';
+                aiWelcome.textContent = 'Bonjour! Je suis votre guide touristique virtuel pour le Bénin. Posez-moi vos questions sur les destinations, activités ou conseils de voyage.';
+                aiMessages.appendChild(aiWelcome);
+                const aiInput = document.createElement('div');
+                aiInput.className = 'ai-input';
+                const aiQuery = document.createElement('input');
+                aiQuery.type = 'text';
+                aiQuery.id = 'ai-query';
+                aiQuery.dataset.i18n = 'ai-placeholder';
+                aiQuery.placeholder = 'Posez votre question...';
+                const aiSend = document.createElement('button');
+                aiSend.id = 'ai-send';
+                aiSend.innerHTML = '<i class="fas fa-paper-plane"></i>';
+                aiInput.appendChild(aiQuery);
+                aiInput.appendChild(aiSend);
+                aiChatbox.appendChild(aiHeader);
+                aiChatbox.appendChild(aiMessages);
+                aiChatbox.appendChild(aiInput);
+                
+                app.appendChild(aiButton);
+                app.appendChild(aiChatbox);
+                
+                // Create footer
+                const footer = document.createElement('footer');
+                footer.id = 'contact';
+                const footerLinks = document.createElement('div');
+                footerLinks.className = 'footer-links';
+                ['home', 'map', 'gallery', 'hotels', 'blog', 'contact'].forEach(id => {
+                    const link = document.createElement('a');
+                    link.href = `#${id}`;
+                    link.dataset.i18n = `footer-${id}`;
+                    link.textContent = id.charAt(0).toUpperCase() + id.slice(1);
+                    footerLinks.appendChild(link);
+                });
+                const socialIcons = document.createElement('div');
+                socialIcons.className = 'social-icons';
+                const socialPlatforms = ['instagram', 'facebook', 'twitter', 'tiktok'];
+                socialPlatforms.forEach(platform => {
+                    const icon = document.createElement('a');
+                    icon.href = '#';
+                    icon.ariaLabel = platform;
+                    icon.innerHTML = `<i class="fab fa-${platform}"></i>`;
+                    socialIcons.appendChild(icon);
+                });
+                const copyright = document.createElement('p');
+                copyright.innerHTML = '&copy; 2023 MONARCHY - <span data-i18n="footer-rights">Tous droits réservés</span>';
+                footer.appendChild(footerLinks);
+                footer.appendChild(socialIcons);
+                footer.appendChild(copyright);
+                app.appendChild(footer);
+                
+                // Store references to modals
+                this.bookingModal = bookingModal;
+                this.confirmationModal = confirmationModal;
+                this.aiChatbox = aiChatbox;
+                this.aiMessagesContainer = aiMessages;
+            }
+            
+            createSectionHeader(titleKey, subtitleKey) {
+                const header = document.createElement('div');
+                header.className = 'section-header';
+                const title = document.createElement('h2');
+                title.className = 'section-title';
+                title.dataset.i18n = titleKey;
+                const subtitle = document.createElement('p');
+                subtitle.className = 'section-subtitle';
+                subtitle.dataset.i18n = subtitleKey;
+                header.appendChild(title);
+                header.appendChild(subtitle);
+                return header;
+            }
+            
+            createFormGroup(labelKey, type, id, required, options = []) {
+                const group = document.createElement('div');
+                group.className = 'form-group';
+                const label = document.createElement('label');
+                label.htmlFor = id;
+                label.dataset.i18n = labelKey;
+                const input = type === 'select' ? document.createElement('select') : 
+                              type === 'textarea' ? document.createElement('textarea') : 
+                              document.createElement('input');
+                input.id = id;
+                input.required = required;
+                
+                if (type !== 'select' && type !== 'textarea') {
+                    input.type = type;
+                }
+                
+                if (type === 'select' && options.length > 0) {
+                    options.forEach(opt => {
+                        const option = document.createElement('option');
+                        option.value = opt.value;
+                        option.textContent = opt.text;
+                        if (opt.selected) option.selected = true;
+                        input.appendChild(option);
+                    });
+                }
+                
+                group.appendChild(label);
+                group.appendChild(input);
+                return group;
+            }
+            
+            setupEventListeners() {
+                // Language switcher
+                document.querySelectorAll('.language-switcher button').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        this.currentLang = btn.dataset.lang;
+                        document.querySelectorAll('.language-switcher button').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.updateTranslations();
+                    });
+                });
+                
+                // Hamburger menu
+                document.getElementById('hamburger').addEventListener('click', () => {
+                    document.querySelector('.nav-links').classList.toggle('active');
+                });
+                
+                // Hotel filtering
+                document.querySelectorAll('.hotel-filter-btn').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        document.querySelectorAll('.hotel-filter-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+                        this.filterHotels(btn.dataset.hotelFilter);
+                    });
+                });
+                
+                // Book hotel buttons
+                document.addEventListener('click', (e) => {
+                    if (e.target.classList.contains('hotel-book-btn')) {
+                        const hotelId = parseInt(e.target.dataset.hotelId);
+                        this.showBookingModal(hotelId);
+                    }
+                });
+                
+                // AI assistant toggle
+                document.getElementById('ai-button').addEventListener('click', () => {
+                    this.aiChatbox.classList.toggle('active');
+                });
+                
+                // AI send message
+                document.getElementById('ai-send').addEventListener('click', () => {
+                    this.sendAIMessage();
+                });
+                
+                document.getElementById('ai-query').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        this.sendAIMessage();
+                    }
+                });
+                
+                // Close modals when clicking outside
+                this.bookingModal.addEventListener('click', (e) => {
+                    if (e.target === this.bookingModal) {
+                        this.bookingModal.classList.remove('active');
+                    }
+                });
+                
+                this.confirmationModal.addEventListener('click', (e) => {
+                    if (e.target === this.confirmationModal) {
+                        this.confirmationModal.classList.remove('active');
+                    }
+                });
+                
+                // Close modal buttons
+                document.querySelector('.booking-cancel').addEventListener('click', () => {
+                    this.bookingModal.classList.remove('active');
+                });
+                
+                document.querySelector('.close-modal').addEventListener('click', () => {
+                    this.bookingModal.classList.remove('active');
+                });
+                
+                document.querySelector('.confirmation-close').addEventListener('click', () => {
+                    this.confirmationModal.classList.remove('active');
+                });
+                
+                // Booking form submission
+                document.getElementById('booking-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    this.confirmBooking();
+                });
+            }
+            
+            updateTranslations() {
+                document.documentElement.lang = this.currentLang;
+                
+                // Update all elements with data-i18n attribute
+                document.querySelectorAll('[data-i18n]').forEach(el => {
+                    const key = el.dataset.i18n;
+                    if (translations[key] && translations[key][this.currentLang]) {
+                        if (el.tagName === 'INPUT' && el.hasAttribute('placeholder')) {
+                            el.placeholder = translations[key][this.currentLang];
+                        } else {
+                            el.textContent = translations[key][this.currentLang];
+                        }
+                    }
+                });
+                
+                // Update hotel cards
+                this.renderHotels();
+            }
+            
+            setupMap() {
+                this.map = L.map('benin-map').setView([9.3077, 2.3158], 7);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                }).addTo(this.map);
+                
+                // Markers for tourist sites
+                const locations = [
+                    {name: "Porto-Novo", coords: [6.4965, 2.6036], type: "culture"},
+                    {name: "Ouidah", coords: [6.3631, 2.0855], type: "history"},
+                    {name: "Ganvié", coords: [6.4667, 2.4167], type: "nature"},
+                    {name: "Parc Pendjari", coords: [11.0833, 1.5000], type: "nature"},
+                    {name: "Abomey", coords: [7.1833, 1.9833], type: "history"},
+                    {name: "Grand-Popo", coords: [6.2833, 1.8333], type: "beach"}
+                ];
+                
+                locations.forEach(loc => {
+                    const marker = L.marker(loc.coords).addTo(this.map);
+                    const buttonText = this.currentLang === 'fr' ? 'Plus d\'infos' : 'More info';
+                    marker.bindPopup(`<b>${loc.name}</b><br><button onclick="app.showLocationDetail('${loc.name}')">${buttonText}</button>`);
+                });
+            }
+            
+            renderHotels() {
+                const hotelsContainer = document.getElementById('hotelsContainer');
+                hotelsContainer.innerHTML = '';
+                
+                hotelsData.forEach(hotel => {
+                    const card = document.createElement('div');
+                    card.className = 'hotel-card';
+                    card.dataset.hotelCategory = hotel.category;
+                    
+                    // Hotel image
+                    const imageDiv = document.createElement('div');
+                    imageDiv.className = 'hotel-image';
+                    const img = document.createElement('img');
+                    img.src = hotel.image;
+                    img.alt = hotel.name;
+                    img.loading = 'lazy';
+                    
+                    // Rating
+                    const rating = document.createElement('div');
+                    rating.className = 'hotel-rating';
+                    rating.innerHTML = `<i class="fas fa-star"></i><span>${hotel.rating}</span>`;
+                    
+                    // Price
+                    const price = document.createElement('div');
+                    price.className = 'hotel-price';
+                    price.textContent = `${hotel.price.toLocaleString()} FCFA`;
+                    
+                    imageDiv.appendChild(img);
+                    imageDiv.appendChild(rating);
+                    imageDiv.appendChild(price);
+                    
+                    // Hotel content
+                    const content = document.createElement('div');
+                    content.className = 'hotel-content';
+                    
+                    // Title
+                    const title = document.createElement('h3');
+                    title.className = 'hotel-title';
+                    title.textContent = hotel.name;
+                    
+                    // Location
+                    const location = document.createElement('div');
+                    location.className = 'hotel-location';
+                    location.innerHTML = `<i class="fas fa-map-marker-alt"></i><span>${hotel.location}</span>`;
+                    
+                    // Amenities
+                    const amenities = document.createElement('div');
+                    amenities.className = 'hotel-amenities';
+                    
+                    hotel.amenities.forEach(amenity => {
+                        const amenitySpan = document.createElement('span');
+                        amenitySpan.className = 'hotel-amenity';
+                        const icon = document.createElement('i');
+                        
+                        // Map amenity keys to icons
+                        const amenityIcons = {
+                            'wifi': 'fa-wifi',
+                            'pool': 'fa-swimming-pool',
+                            'restaurant': 'fa-utensils',
+                            'spa': 'fa-spa',
+                            'parking': 'fa-parking',
+                            'service': 'fa-concierge-bell',
+                            'eco': 'fa-leaf',
+                            'view': 'fa-mountain',
+                            'hiking': 'fa-hiking',
+                            'beach': 'fa-umbrella-beach',
+                            'bike': 'fa-bicycle',
+                            'breakfast': 'fa-coffee',
+                            'gym': 'fa-dumbbell',
+                            'lake': 'fa-water',
+                            'tours': 'fa-ship'
+                        };
+                        
+                        if (amenityIcons[amenity]) {
+                            icon.className = `fas ${amenityIcons[amenity]}`;
+                            amenitySpan.appendChild(icon);
+                        }
+                        
+                        const text = document.createElement('span');
+                        text.dataset.i18n = `amenity-${amenity}`;
+                        text.textContent = amenity;
+                        amenitySpan.appendChild(text);
+                        
+                        amenities.appendChild(amenitySpan);
+                    });
+                    
+                    // Footer
+                    const footer = document.createElement('div');
+                    footer.className = 'hotel-footer';
+                    const viewBtn = document.createElement('button');
+                    viewBtn.className = 'hotel-view-btn';
+                    viewBtn.dataset.hotelId = hotel.id;
+                    viewBtn.dataset.i18n = 'view-more';
+                    viewBtn.textContent = 'Voir plus';
+                    const bookBtn = document.createElement('button');
+                    bookBtn.className = 'hotel-book-btn';
+                    bookBtn.dataset.hotelId = hotel.id;
+                    bookBtn.dataset.i18n = 'book-now';
+                    bookBtn.textContent = 'Réserver';
+                    footer.appendChild(viewBtn);
+                    footer.appendChild(bookBtn);
+                    
+                    content.appendChild(title);
+                    content.appendChild(location);
+                    content.appendChild(amenities);
+                    content.appendChild(footer);
+                    
+                    card.appendChild(imageDiv);
+                    card.appendChild(content);
+                    hotelsContainer.appendChild(card);
+                    
+                    // Create reviews section
+                    const reviewsSection = document.createElement('div');
+                    reviewsSection.className = 'hotel-reviews';
+                    reviewsSection.dataset.hotelId = hotel.id;
+                    
+                    // Reviews header
+                    const reviewsHeader = document.createElement('div');
+                    reviewsHeader.className = 'reviews-header';
+                    
+                    const reviewsTitle = document.createElement('h3');
+                    reviewsTitle.className = 'reviews-title';
+                    reviewsTitle.dataset.i18n = 'reviews-title';
+                    reviewsTitle.textContent = 'Avis des clients';
+                    
+                    const addReviewBtn = document.createElement('button');
+                    addReviewBtn.className = 'add-review-btn';
+                    addReviewBtn.dataset.i18n = 'add-review';
+                    addReviewBtn.textContent = 'Ajouter un avis';
+                    addReviewBtn.dataset.hotelId = hotel.id;
+                    
+                    reviewsHeader.appendChild(reviewsTitle);
+                    reviewsHeader.appendChild(addReviewBtn);
+                    
+                    // Reviews list
+                    const reviewsList = document.createElement('div');
+                    reviewsList.className = 'reviews-list';
+                    
+                    // Add existing reviews
+                    hotel.reviews.forEach(review => {
+                        const reviewItem = this.createReviewItem(review);
+                        reviewsList.appendChild(reviewItem);
+                    });
+                    
+                    // Review form (hidden by default)
+                    const reviewForm = document.createElement('div');
+                    reviewForm.className = 'review-form';
+                    reviewForm.style.display = 'none';
+                    
+                    const formTitle = document.createElement('h4');
+                    formTitle.className = 'form-title';
+                    formTitle.dataset.i18n = 'add-review';
+                    formTitle.textContent = 'Ajouter un avis';
+                    
+                    const formGroupName = document.createElement('div');
+                    formGroupName.className = 'form-group';
+                    const nameLabel = document.createElement('label');
+                    nameLabel.htmlFor = `name-${hotel.id}`;
+                    nameLabel.dataset.i18n = 'your-name';
+                    nameLabel.textContent = 'Votre nom';
+                    const nameInput = document.createElement('input');
+                    nameInput.type = 'text';
+                    nameInput.id = `name-${hotel.id}`;
+                    nameInput.required = true;
+                    formGroupName.appendChild(nameLabel);
+                    formGroupName.appendChild(nameInput);
+                    
+                    const ratingLabel = document.createElement('label');
+                    ratingLabel.dataset.i18n = 'your-rating';
+                    ratingLabel.textContent = 'Votre note';
+                    
+                    const starsContainer = document.createElement('div');
+                    starsContainer.className = 'rating-stars';
+                    for (let i = 1; i <= 5; i++) {
+                        const star = document.createElement('span');
+                        star.className = 'star';
+                        star.innerHTML = '<i class="fas fa-star"></i>';
+                        star.dataset.rating = i;
+                        starsContainer.appendChild(star);
+                    }
+                    
+                    const formGroupReview = document.createElement('div');
+                    formGroupReview.className = 'form-group';
+                    const reviewLabel = document.createElement('label');
+                    reviewLabel.htmlFor = `review-${hotel.id}`;
+                    reviewLabel.dataset.i18n = 'your-review';
+                    reviewLabel.textContent = 'Votre avis';
+                    const reviewTextarea = document.createElement('textarea');
+                    reviewTextarea.id = `review-${hotel.id}`;
+                    reviewTextarea.required = true;
+                    reviewTextarea.dataset.i18n = 'review-placeholder';
+                    reviewTextarea.placeholder = 'Partagez votre expérience...';
+                    formGroupReview.appendChild(reviewLabel);
+                    formGroupReview.appendChild(reviewTextarea);
+                    
+                    const submitBtn = document.createElement('button');
+                    submitBtn.type = 'button';
+                    submitBtn.className = 'submit-review';
+                    submitBtn.dataset.i18n = 'submit-review';
+                    submitBtn.textContent = 'Soumettre';
+                    submitBtn.dataset.hotelId = hotel.id;
+                    
+                    reviewForm.appendChild(formTitle);
+                    reviewForm.appendChild(formGroupName);
+                    reviewForm.appendChild(ratingLabel);
+                    reviewForm.appendChild(starsContainer);
+                    reviewForm.appendChild(formGroupReview);
+                    reviewForm.appendChild(submitBtn);
+                    
+                    reviewsSection.appendChild(reviewsHeader);
+                    reviewsSection.appendChild(reviewsList);
+                    reviewsSection.appendChild(reviewForm);
+                    
+                    hotelsContainer.appendChild(reviewsSection);
+                    
+                    // Add event listeners for this hotel
+                    viewBtn.addEventListener('click', () => {
+                        reviewsSection.classList.toggle('active');
+                        viewBtn.textContent = reviewsSection.classList.contains('active') ? 
+                            (this.currentLang === 'fr' ? 'Voir moins' : 'View less') : 
+                            (this.currentLang === 'fr' ? 'Voir plus' : 'View more');
+                    });
+                    
+                    addReviewBtn.addEventListener('click', () => {
+                        reviewForm.style.display = 'block';
+                        reviewsList.style.display = 'none';
+                        addReviewBtn.style.display = 'none';
+                    });
+                    
+                    starsContainer.querySelectorAll('.star').forEach(star => {
+                        star.addEventListener('click', (e) => {
+                            const rating = parseInt(star.dataset.rating);
+                            this.selectedRating = rating;
+                            
+                            // Update stars
+                            starsContainer.querySelectorAll('.star').forEach((s, index) => {
+                                if (index < rating) {
+                                    s.classList.add('active');
+                                } else {
+                                    s.classList.remove('active');
+                                }
+                            });
+                        });
+                    });
+                    
+                    submitBtn.addEventListener('click', () => {
+                        const name = nameInput.value;
+                        const comment = reviewTextarea.value;
+                        
+                        if (name && comment && this.selectedRating > 0) {
+                            // Create new review
+                            const newReview = {
+                                id: Date.now(),
+                                author: name,
+                                date: new Date().toLocaleDateString(this.currentLang === 'fr' ? 'fr-FR' : 'en-US'),
+                                rating: this.selectedRating,
+                                comment: comment
+                            };
+                            
+                            // Add to hotel data
+                            const hotelIndex = hotelsData.findIndex(h => h.id === hotel.id);
+                            if (hotelIndex !== -1) {
+                                hotelsData[hotelIndex].reviews.push(newReview);
+                                
+                                // Add to UI
+                                const reviewItem = this.createReviewItem(newReview);
+                                reviewsList.appendChild(reviewItem);
+                                
+                                // Reset form
+                                nameInput.value = '';
+                                reviewTextarea.value = '';
+                                starsContainer.querySelectorAll('.star').forEach(star => {
+                                    star.classList.remove('active');
+                                });
+                                this.selectedRating = 0;
+                                
+                                // Show reviews list again
+                                reviewForm.style.display = 'none';
+                                reviewsList.style.display = 'grid';
+                                addReviewBtn.style.display = 'block';
+                            }
+                        } else {
+                            alert(this.currentLang === 'fr' ? 'Veuillez remplir tous les champs et sélectionner une note' : 'Please fill all fields and select a rating');
+                        }
+                    });
+                });
+            }
+            
+            createReviewItem(review) {
+                const reviewItem = document.createElement('div');
+                reviewItem.className = 'review-item';
+                
+                const reviewHeader = document.createElement('div');
+                reviewHeader.className = 'review-header';
+                
+                const reviewAuthor = document.createElement('div');
+                reviewAuthor.className = 'review-author';
+                reviewAuthor.textContent = review.author;
+                
+                const reviewDate = document.createElement('div');
+                reviewDate.className = 'review-date';
+                reviewDate.textContent = review.date;
+                
+                reviewHeader.appendChild(reviewAuthor);
+                reviewHeader.appendChild(reviewDate);
+                
+                const reviewRating = document.createElement('div');
+                reviewRating.className = 'review-rating';
+                for (let i = 0; i < 5; i++) {
+                    const star = document.createElement('i');
+                    star.className = 'fas fa-star';
+                    star.style.color = i < review.rating ? 'var(--accent)' : 'rgba(255,255,255,0.3)';
+                    reviewRating.appendChild(star);
+                }
+                
+                const reviewContent = document.createElement('div');
+                reviewContent.className = 'review-content';
+                reviewContent.textContent = review.comment;
+                
+                reviewItem.appendChild(reviewHeader);
+                reviewItem.appendChild(reviewRating);
+                reviewItem.appendChild(reviewContent);
+                
+                return reviewItem;
+            }
+            
+            filterHotels(filter) {
+                const cards = document.querySelectorAll('.hotel-card');
+                const reviews = document.querySelectorAll('.hotel-reviews');
+                
+                cards.forEach(card => {
+                    if (filter === 'all' || card.dataset.hotelCategory === filter) {
+                        card.style.display = 'block';
+                        // Hide reviews when filtering
+                        const hotelId = card.querySelector('.hotel-view-btn').dataset.hotelId;
+                        const reviewSection = document.querySelector(`.hotel-reviews[data-hotel-id="${hotelId}"]`);
+                        if (reviewSection) {
+                            reviewSection.style.display = 'none';
+                        }
+                    } else {
+                        card.style.display = 'none';
+                        // Also hide the corresponding reviews section
+                        const hotelId = card.querySelector('.hotel-view-btn').dataset.hotelId;
+                        const reviewSection = document.querySelector(`.hotel-reviews[data-hotel-id="${hotelId}"]`);
+                        if (reviewSection) {
+                            reviewSection.style.display = 'none';
+                        }
+                    }
+                });
+                
+                // Reset "Voir plus" buttons
+                document.querySelectorAll('.hotel-view-btn').forEach(btn => {
+                    btn.textContent = this.currentLang === 'fr' ? 'Voir plus' : 'View more';
+                });
+            }
+            
+            showBookingModal(hotelId) {
+                this.currentHotel = hotelsData.find(h => h.id === hotelId);
+                
+                if (!this.currentHotel) return;
+                
+                // Update modal content
+                document.getElementById('booking-hotel-name').textContent = this.currentHotel.name;
+                document.getElementById('booking-hotel-location').innerHTML = 
+                    `<i class="fas fa-map-marker-alt"></i> ${this.currentHotel.location}`;
+                document.getElementById('booking-hotel-image').src = this.currentHotel.image;
+                document.getElementById('booking-hotel-image').alt = this.currentHotel.name;
+                
+                const priceText = this.currentLang === 'fr' ? 
+                    `Prix: ${this.currentHotel.price.toLocaleString()} FCFA/nuit` : 
+                    `Price: ${this.currentHotel.price.toLocaleString()} FCFA/night`;
+                document.getElementById('booking-hotel-price').textContent = priceText;
+                
+                // Update room types
+                const roomTypeSelect = document.getElementById('room-type');
+                roomTypeSelect.innerHTML = '';
+                this.currentHotel.roomTypes.forEach(room => {
+                    const option = document.createElement('option');
+                    option.value = room.type;
+                    const roomTypeText = this.currentLang === 'fr' ? 
+                        `Chambre ${room.type.charAt(0).toUpperCase() + room.type.slice(1)} (${room.price.toLocaleString()} FCFA)` :
+                        `${room.type.charAt(0).toUpperCase() + room.type.slice(1)} Room (${room.price.toLocaleString()} FCFA)`;
+                    option.textContent = roomTypeText;
+                    roomTypeSelect.appendChild(option);
+                });
+                
+                // Set default dates
+                const today = new Date();
+                const tomorrow = new Date(today);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                
+                const checkInInput = document.getElementById('check-in');
+                checkInInput.valueAsDate = tomorrow;
+                checkInInput.min = tomorrow.toISOString().split('T')[0];
+                
+                const dayAfterTomorrow = new Date(tomorrow);
+                dayAfterTomorrow.setDate(dayAfterTomorrow.getDate() + 1);
+                
+                const checkOutInput = document.getElementById('check-out');
+                checkOutInput.valueAsDate = dayAfterTomorrow;
+                checkOutInput.min = dayAfterTomorrow.toISOString().split('T')[0];
+                
+                // Update total price
+                this.updateBookingPrice();
+                
+                // Show modal
+                this.bookingModal.classList.add('active');
+                
+                // Add event listener for room type change
+                roomTypeSelect.addEventListener('change', () => {
+                    this.updateBookingPrice();
+                });
+            }
+            
+            updateBookingPrice() {
+                if (!this.currentHotel) return;
+                
+                const roomTypeSelect = document.getElementById('room-type');
+                const selectedRoomType = roomTypeSelect.value;
+                const room = this.currentHotel.roomTypes.find(r => r.type === selectedRoomType);
+                
+                if (room) {
+                    document.getElementById('booking-total-price').textContent = 
+                        `${room.price.toLocaleString()} FCFA`;
+                }
+            }
+            
+            confirmBooking() {
+                const hotelName = this.currentHotel.name;
+                const confirmationTitle = this.currentLang === 'fr' ? 
+                    `Réservation confirmée à ${hotelName}` : 
+                    `Booking confirmed at ${hotelName}`;
+                
+                const confirmationMessage = this.currentLang === 'fr' ? 
+                    `Votre réservation a été confirmée avec succès. Un email de confirmation a été envoyé à votre adresse. Merci d'avoir choisi MONARCHY pour votre voyage au Bénin !` : 
+                    `Your booking has been successfully confirmed. A confirmation email has been sent to your address. Thank you for choosing MONARCHY for your trip to Benin!`;
+                
+                document.getElementById('confirmation-title').textContent = confirmationTitle;
+                document.getElementById('confirmation-message').textContent = confirmationMessage;
+                
+                this.bookingModal.classList.remove('active');
+                this.confirmationModal.classList.add('active');
+            }
+            
+            showLocationDetail(locationName) {
+                const responses = {
+                    "Porto-Novo": {
+                        "fr": "Porto-Novo, capitale officielle du Bénin, est réputée pour son riche patrimoine culturel avec des musées et une architecture coloniale bien préservée.",
+                        "en": "Porto-Novo, Benin's official capital, is renowned for its rich cultural heritage with well-preserved museums and colonial architecture."
+                    },
+                    "Ouidah": {
+                        "fr": "Ouidah est une ville historique marquée par la traite des esclaves. Visitez la Porte du Non-Retour et le Temple des Pythons.",
+                        "en": "Ouidah is a historic city marked by the slave trade. Visit the Door of No Return and the Python Temple."
+                    },
+                    "Ganvié": {
+                        "fr": "Surnommée la 'Venise de l'Afrique', Ganvié est un village lacustre fascinant construit sur pilotis au milieu du lac Nokoué.",
+                        "en": "Nicknamed the 'Venice of Africa', Ganvié is a fascinating lake village built on stilts in the middle of Lake Nokoué."
+                    },
+                    "Parc Pendjari": {
+                        "fr": "Le parc national de la Pendjari est l'une des meilleures réserves animalières d'Afrique de l'Ouest, abritant éléphants, lions et hippopotames.",
+                        "en": "Pendjari National Park is one of West Africa's best wildlife reserves, home to elephants, lions and hippos."
+                    },
+                    "Abomey": {
+                        "fr": "Ancienne capitale du royaume du Dahomey, Abomey abrite les palais royaux classés au patrimoine mondial de l'UNESCO.",
+                        "en": "Former capital of the Dahomey kingdom, Abomey is home to the UNESCO World Heritage-listed Royal Palaces."
+                    },
+                    "Grand-Popo": {
+                        "fr": "Station balnéaire prisée avec de magnifiques plages de sable fin, idéale pour se détendre et profiter de l'océan.",
+                        "en": "Popular seaside resort with beautiful sandy beaches, perfect for relaxing and enjoying the ocean."
+                    }
+                };
+                
+                const defaultMessage = this.currentLang === 'fr' ? 
+                    "Informations non disponibles pour cette destination." : 
+                    "Information not available for this destination.";
+                
+                alert(`${locationName}\n\n${responses[locationName] ? responses[locationName][this.currentLang] : defaultMessage}`);
+            }
+            
+            sendAIMessage() {
+                const input = document.getElementById('ai-query');
+                const message = input.value.trim();
+                
+                if (message) {
+                    // Add user message
+                    const userMessage = document.createElement('div');
+                    userMessage.className = 'ai-message ai-question';
+                    userMessage.textContent = message;
+                    this.aiMessagesContainer.appendChild(userMessage);
+                    
+                    // Clear input
+                    input.value = '';
+                    
+                    // Show typing indicator
+                    this.showTypingIndicator();
+                    
+                    // Simulate AI response after delay
+                    setTimeout(() => {
+                        this.hideTypingIndicator();
+                        this.generateAIResponse(message);
+                    }, 1500);
+                }
+            }
+            
+            showTypingIndicator() {
+                this.typingIndicator = true;
+                const typingElement = document.createElement('div');
+                typingElement.className = 'typing-indicator';
+                typingElement.id = 'typing-indicator';
+                typingElement.innerHTML = '<span></span><span></span><span></span>';
+                this.aiMessagesContainer.appendChild(typingElement);
+                this.aiMessagesContainer.scrollTop = this.aiMessagesContainer.scrollHeight;
+            }
+            
+            hideTypingIndicator() {
+                this.typingIndicator = false;
+                const typingElement = document.getElementById('typing-indicator');
+                if (typingElement) {
+                    typingElement.remove();
+                }
+            }
+            
+            generateAIResponse(message) {
+                const responses = {
+                    "bonjour": "Bonjour ! Comment puis-je vous aider à planifier votre voyage au Bénin ?",
+                    "salut": "Salut ! Prêt à découvrir les merveilles du Bénin ?",
+                    "hotel": "Nous avons une sélection d'hôtels pour tous les budgets. Consultez notre section 'Hôtels' pour plus de détails.",
+                    "restaurant": "Le Bénin offre une cuisine locale délicieuse. Je vous recommande d'essayer le poulet bicyclette ou l'akassa !",
+                    "visite": "Les sites incontournables incluent Ouidah, Ganvié, le parc Pendjari et les palais royaux d'Abomey.",
+                    "plage": "Les meilleures plages se trouvent à Grand-Popo et à Cotonou. Idéales pour se détendre après une journée de visite !",
+                    "culture": "La culture béninoise est riche et variée, avec des influences vaudou, des festivals colorés et un patrimoine historique important.",
+                    "météo": "Le Bénin a un climat tropical avec deux saisons des pluies. Consultez notre widget météo pour les prévisions actuelles."
+                };
+                
+                const defaultResponse = "Je suis votre assistant touristique pour le Bénin. Posez-moi des questions sur les destinations, les hôtels, les activités ou la culture locale !";
+                
+                let response = defaultResponse;
+                
+                // Check for keywords
+                const lowerMessage = message.toLowerCase();
+                for (const keyword in responses) {
+                    if (lowerMessage.includes(keyword)) {
+                        response = responses[keyword];
+                        break;
+                    }
+                }
+                
+                // Add AI response
+                const aiResponse = document.createElement('div');
+                aiResponse.className = 'ai-message ai-response';
+                aiResponse.textContent = response;
+                this.aiMessagesContainer.appendChild(aiResponse);
+                this.aiMessagesContainer.scrollTop = this.aiMessagesContainer.scrollHeight;
+            }
+            
+            fetchWeather() {
+                // Simulate weather data for Benin
+                const weatherData = {
+                    temperature: 28,
+                    condition: "Ensoleillé",
+                    icon: "fa-sun"
+                };
+                
+                this.weatherData = weatherData;
+                this.updateWeatherWidget();
+            }
+            
+            updateWeatherWidget() {
+                if (!this.weatherData) return;
+                
+                const weatherWidget = document.getElementById('weatherWidget');
+                const weatherIcon = weatherWidget.querySelector('.weather-icon');
+                const weatherContent = document.getElementById('weatherContent');
+                
+                weatherIcon.className = `weather-icon fas ${this.weatherData.icon}`;
+                
+                const tempText = this.currentLang === 'fr' ? 
+                    `${this.weatherData.temperature}°C - ${this.weatherData.condition}` : 
+                    `${this.weatherData.temperature}°C - Sunny`;
+                
+                weatherContent.textContent = tempText;
+            }
+            
+            setupPWA() {
+                let deferredPrompt;
+                
+                window.addEventListener('beforeinstallprompt', (e) => {
+                    // Prevent Chrome 67 and earlier from automatically showing the prompt
+                    e.preventDefault();
+                    // Stash the event so it can be triggered later.
+                    deferredPrompt = e;
+                    // Show the install button
+                    document.getElementById('installContainer').classList.add('active');
+                });
+                
+                document.getElementById('installButton').addEventListener('click', () => {
+                    // Show the install prompt
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        // Wait for the user to respond to the prompt
+                        deferredPrompt.userChoice.then((choiceResult) => {
+                            if (choiceResult.outcome === 'accepted') {
+                                console.log('User accepted the install prompt');
+                            } else {
+                                console.log('User dismissed the install prompt');
+                            }
+                            deferredPrompt = null;
+                        });
+                    }
+                    // Hide the install button
+                    document.getElementById('installContainer').classList.remove('active');
+                });
+            }
+        }
+
+        // Initialize the application
+        const app = new MonarchyApp();
+    </script>
+</body>
+</html>
